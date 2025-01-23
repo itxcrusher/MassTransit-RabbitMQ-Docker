@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672" # RabbitMQ communication
+      - "15672:15672" # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  app:
+    build:
+      context: ./GettingStarted
+      dockerfile: Dockerfile
+    container_name: gettingstarted-app
+    depends_on:
+      - rabbitmq
+    ports:
+      - "5000:5000"
+      - "5001:5001" # For HTTPS if needed
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
